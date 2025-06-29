@@ -1,0 +1,133 @@
+{
+  "properties": [
+    {
+      "id": "string (unique identifier like 'PLOT001')",
+      "title": "string (property title)",
+      "type": "string (residential|commercial|agricultural|industrial)",
+      "status": "string (Available|Sold|Under Contract|Reserved)",
+      "dimensions": {
+        "width": "number (in meters)",
+        "length": "number (in meters)",
+        "area": "number (in square meters)",
+        "areaSqFt": "number (in square feet)"
+      },
+      "location": {
+        "latitude": "number (decimal degrees)",
+        "longitude": "number (decimal degrees)",
+        "locality": "string (neighborhood/area name)",
+        "city": "string (city name)",
+        "state": "string (state/province name)",
+        "pincode": "string (postal code)",
+        "address": "string (full address)",
+        "coordinates": "array [number, number] (latitude, longitude)"
+      },
+      "price": {
+        "amount": "number (total price in base currency)",
+        "perSqFt": "number (price per square foot)",
+        "perSqM": "number (price per square meter)",
+        "currency": "string (INR|USD|EUR|GBP)",
+        "negotiable": "boolean",
+        "paymentTerms": "array of strings (payment schedule)"
+      },
+      "features": "array of strings (property features like 'Corner Plot', 'Main Road Facing', etc.)",
+      "amenities": "array of strings (nearby amenities like 'Metro Station (500m)', 'Shopping Mall (1km)', etc.)",
+      "documents": [
+        {
+          "name": "string (document name)",
+          "status": "string (Verified|Pending|Rejected)",
+          "icon": "string (icon name)"
+        }
+      ],
+      "contact": {
+        "agent": "string (agent name)",
+        "phone": "string (phone number)",
+        "email": "string (email address)",
+        "company": "string (company name)",
+        "experience": "string (years of experience)",
+        "rating": "number (rating out of 5)",
+        "reviews": "number (number of reviews)",
+        "verified": "boolean"
+      },
+      "images": "array of strings (image URLs)",
+      "description": "string (detailed property description)",
+      "highlights": "array of strings (key highlights)",
+      "nearbyProperties": [
+        {
+          "id": "string (property ID)",
+          "price": "string (formatted price)",
+          "area": "string (formatted area)"
+        }
+      ],
+      "createdAt": "string (ISO date string)",
+      "lastUpdated": "string (ISO date string)",
+      "views": "number (view count)",
+      "saved": "number (save count)",
+      "tags": "array of strings (search tags)",
+      "zoning": "string (zoning classification)",
+      "soilType": "string (soil type for agricultural)",
+      "roadWidth": "number (road width in meters)",
+      "facing": "string (property facing direction)",
+      "slope": "string (land slope)",
+      "waterTable": "string (water table depth)",
+      "electricity": "boolean (electricity available)",
+      "waterSupply": "boolean (water supply available)",
+      "sewage": "boolean (sewage system available)",
+      "internet": "boolean (internet connectivity)",
+      "security": "boolean (security system)",
+      "parkingSpaces": "number (number of parking spaces)",
+      "constructionAllowed": "boolean (construction allowed)",
+      "floorAreaRatio": "number (FAR ratio)",
+      "buildingHeight": "number (maximum building height in meters)",
+      "setback": {
+        "front": "number (front setback in meters)",
+        "back": "number (back setback in meters)",
+        "left": "number (left setback in meters)",
+        "right": "number (right setback in meters)"
+      },
+      "environmentalFactors": {
+        "floodZone": "boolean",
+        "earthquakeZone": "string",
+        "airQuality": "string (good|moderate|poor)",
+        "noiseLevel": "string (low|moderate|high)"
+      },
+      "investmentPotential": {
+        "appreciationRate": "number (annual appreciation percentage)",
+        "rentalYield": "number (potential rental yield percentage)",
+        "developmentPotential": "string (low|medium|high)"
+      },
+      "legalStatus": {
+        "titleClear": "boolean",
+        "encumbrances": "boolean",
+        "litigation": "boolean",
+        "approvals": "array of strings (required approvals)"
+      },
+      "infrastructure": {
+        "roads": "string (road condition)",
+        "drainage": "string (drainage system)",
+        "streetlights": "boolean",
+        "publicTransport": "string (distance to public transport)"
+      },
+      "futurePlans": {
+        "metroStation": "string (planned metro station)",
+        "highway": "string (planned highway)",
+        "airport": "string (planned airport expansion)",
+        "commercialHub": "string (planned commercial development)"
+      },
+      "similarProperties": [
+        {
+          "id": "string",
+          "title": "string",
+          "price": "number",
+          "area": "number",
+          "soldDate": "string (ISO date)"
+        }
+      ],
+      "marketData": {
+        "avgPricePerSqFt": "number (average price in area)",
+        "priceTrend": "string (increasing|stable|decreasing)",
+        "daysOnMarket": "number (average days on market)",
+        "demandLevel": "string (high|medium|low)"
+      }
+    }
+  ]
+} 
