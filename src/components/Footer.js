@@ -2,6 +2,8 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import logo from '@/assets/img/logo.svg';
+import Link from 'next/link';
+
 function Footer() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -39,11 +41,11 @@ function Footer() {
         <div className="flex-1 mb-8 md:mb-0">
           <h4 className="font-semibold text-lg mb-3">Quick Links</h4>
           <ul className="space-y-2 text-gray-300 text-sm">
-            <li><a href="/" className="hover:text-accentYellow transition-colors">Home</a></li>
-            <li><a href="/discover" className="hover:text-accentYellow transition-colors">Discover</a></li>
-            <li><a href="/about" className="hover:text-accentYellow transition-colors">About Us</a></li>
-            <li><a href="/contact" className="hover:text-accentYellow transition-colors">Contact</a></li>
-            <li><a href="/faq" className="hover:text-accentYellow transition-colors">FAQ</a></li>
+            <li><Link href="/" className="hover:text-accentYellow transition-colors">Home</Link></li>
+            <li><Link href="/discover" className="hover:text-accentYellow transition-colors">Discover</Link></li>
+            <li><Link href="/about" className="hover:text-accentYellow transition-colors">About Us</Link></li>
+            <li><Link href="/contact" className="hover:text-accentYellow transition-colors">Contact</Link></li>
+            <li><Link href="/faq" className="hover:text-accentYellow transition-colors">FAQ</Link></li>
           </ul>
         </div>
 

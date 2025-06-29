@@ -82,7 +82,7 @@ function CommandMenu({ isOpen, onClose }) {
 
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, searchResults, suggestedLocations, selectedIndex, onClose]);
+  }, [isOpen, searchResults, suggestedLocations, selectedIndex, onClose, handleLocationSelect]);
 
   // Search locations using OpenStreetMap API
   const searchLocations = async (query) => {

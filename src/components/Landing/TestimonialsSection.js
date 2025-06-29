@@ -36,7 +36,7 @@ export default function TestimonialsSection() {
         {testimonials.map((t, i) => (
           <div key={i} className="bg-gray-50 rounded-2xl shadow p-6 flex flex-col items-center text-center">
             <Image src={t.image} alt={t.name} className="w-20 h-20 rounded-full object-cover mb-4 grayscale-0" />
-            <p className="text-gray-700 mb-3 text-sm">"{t.feedback}"</p>
+            <p className="text-gray-700 mb-3 text-sm">&quot;{t.feedback}&quot;</p>
             <span className="font-semibold text-borderDark">{t.name}</span>
           </div>
         ))}
