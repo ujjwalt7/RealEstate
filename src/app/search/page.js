@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoLocationOutline, IoBedOutline, IoCarOutline, IoResizeOutline, IoFilterOutline, IoOptionsOutline, IoClose, IoSearchOutline, IoArrowBack } from "react-icons/io5";
 import { useSearchParams, useRouter } from "next/navigation";
@@ -341,7 +341,7 @@ function SearchResults() {
                   </h1>
                   <p className="text-sm lg:text-base text-gray-600 mt-1">
                     <span className="text-accentYellow font-medium">
-                      "{searchQuery}"
+                      &quot;{searchQuery}&quot;
                     </span>
                     {searchType === 'location' && (
                       <span className="ml-2 text-gray-500">• Within 10km radius</span>
@@ -444,4 +444,10 @@ function SearchResults() {
   );
 }
 
-export default SearchResults; 
+export default function SearchPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <SearchResults />
+    </Suspense>
+  );
+} 

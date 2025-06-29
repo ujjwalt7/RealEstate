@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IoLocationOutline, IoBedOutline, IoCarOutline, IoResizeOutline, IoFilterOutline, IoOptionsOutline, IoClose } from "react-icons/io5";
 import { useSearchParams } from "next/navigation";
@@ -431,4 +431,10 @@ function Discover() {
   );
 }
 
-export default Discover;
+export default function DiscoverPageWrapper() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Discover />
+    </Suspense>
+  );
+}

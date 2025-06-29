@@ -202,7 +202,7 @@ function CommandMenu({ isOpen, onClose }) {
             <div className="py-2">
               {displayItems.length === 0 && isSearching ? (
                 <div className="p-8 text-center text-gray-500">
-                  No locations found for "{searchQuery}"
+                  No locations found for &quot;{searchQuery}&quot;
                 </div>
               ) : (
                 displayItems.map((item, index) => {

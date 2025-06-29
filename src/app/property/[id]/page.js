@@ -59,6 +59,7 @@ import {
 } from "react-icons/io5";
 import "leaflet/dist/leaflet.css";
 import { propertyService } from '@/lib/propertyService';
+import Image from 'next/image';
 
 const PropertyDetailPage = () => {
   const params = useParams();
@@ -557,7 +558,7 @@ const PropertyDetailPage = () => {
         <div className="text-center">
           <Home className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-2xl font-semibold text-gray-900 mb-2">Property Not Found</h2>
-          <p className="text-gray-600 mb-6">The property you're looking for doesn't exist or has been removed.</p>
+          <p className="text-gray-600 mb-6">The property you&apos;re looking for doesn&apos;t exist or has been removed.</p>
           <button
             onClick={() => router.push('/discover')}
             className="px-6 py-3 bg-accentYellow text-borderDark font-semibold rounded-lg hover:bg-yellow-400 transition-colors"
@@ -1097,9 +1098,11 @@ const PropertyDetailPage = () => {
             <div className="bg-white rounded-2xl p-6 shadow-sm">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">Contact Agent</h3>
               <div className="flex items-center gap-3 mb-4">
-                <img
+                <Image
                   src={property.images?.[0] || "/assets/img/house.png"}
                   alt={property.contact.agent}
+                  width={48}
+                  height={48}
                   className="w-12 h-12 rounded-full object-cover"
                 />
                 <div>
