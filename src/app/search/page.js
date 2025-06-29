@@ -80,11 +80,11 @@ function SearchResults() {
           console.log('Searching by location...');
           if (lat && lon) {
             console.log('Using provided coordinates:', lat, lon);
-            // We have coordinates, search for properties near this location
+            // We have coordinates, search for properties near this location (500km radius)
             result = await propertyService.getPropertiesByLocation(
               parseFloat(lat),
               parseFloat(lon),
-              10, // 10km radius
+              500, // 500km radius
               { page: currentPage, limit: 12 }
             );
           } else {
@@ -102,7 +102,7 @@ function SearchResults() {
               result = await propertyService.getPropertiesByLocation(
                 parseFloat(location.lat),
                 parseFloat(location.lon),
-                10, // 10km radius
+                500, // 500km radius
                 { page: currentPage, limit: 12 }
               );
             } else {
@@ -167,20 +167,45 @@ function SearchResults() {
         }
         
         // Transform data to match the expected format
-        const transformedData = result.properties.map(property => ({
-          id: property.id,
-          title: property.title,
-          location: property.location || `${property.location?.locality}, ${property.location?.city}`,
-          price: property.price || `$${property.price?.amount?.toLocaleString()}`,
-          size: property.size || `${(property.dimensions?.area / 4046.86).toFixed(1)} acres`, // Convert sq m to acres
-          bedrooms: property.bedrooms || 0, // Plots don't have bedrooms
-          parking: property.parking || property.parkingSpaces || 0,
-          type: property.type,
-          coordinates: property.coordinates || property.location?.coordinates || [property.location?.latitude, property.location?.longitude],
-          image: property.image || property.images?.[0] || "/assets/img/house.png",
-          description: property.description,
-          features: property.features || []
-        }));
+        const transformedData = result.properties.map(property => {
+          let priceString = '';
+          if (typeof property.price === 'object' && property.price !== null) {
+            if (property.price.amount !== undefined) {
+              priceString = `₹${property.price.amount.toLocaleString()}`;
+            } else {
+              priceString = 'N/A';
+            }
+          } else if (typeof property.price === 'string') {
+            priceString = property.price;
+          } else {
+            priceString = 'N/A';
+          }
+
+          let locationString = '';
+          if (typeof property.location === 'object' && property.location !== null) {
+            const { locality, city, state } = property.location;
+            locationString = [locality, city, state].filter(Boolean).join(', ');
+          } else if (typeof property.location === 'string') {
+            locationString = property.location;
+          } else {
+            locationString = '';
+          }
+
+          return {
+            id: property.id,
+            title: property.title,
+            location: locationString,
+            price: priceString,
+            size: property.size || `${(property.dimensions?.area / 4046.86).toFixed(1)} acres`, // Convert sq m to acres
+            bedrooms: property.bedrooms || 0, // Plots don't have bedrooms
+            parking: property.parking || property.parkingSpaces || 0,
+            type: property.type,
+            coordinates: property.coordinates || property.location?.coordinates || [property.location?.latitude, property.location?.longitude],
+            image: property.image || property.images?.[0] || "/assets/img/house.png",
+            description: property.description,
+            features: property.features || []
+          };
+        });
 
         console.log('Transformed data:', transformedData);
 
@@ -311,7 +336,7 @@ function SearchResults() {
   return (
     <div className="w-full lg:h-screen flex flex-col lg:flex-row overflow-hidden">
       {/* Left Side - Map (Full width on mobile, 2/5 on desktop) */}
-      <div className="w-full lg:w-2/5 h-[50vh] lg:h-full bg-white border-b lg:border-b-0 lg:border-r border-gray-200">
+      <div className="hidden lg:block lg:w-2/5 h-full bg-white border-r border-gray-200">
         <DiscoverMap
           properties={filteredProperties}
           hoveredPropertyId={hoveredPropertyId}

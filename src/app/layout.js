@@ -3,6 +3,7 @@ import LayoutDef from "@/components/Layout";
 import PageTransition from "@/components/PageTransition";
 import NavigationProgress from "@/components/NavigationProgress";
 import ScrollToTop from "@/components/ScrollToTop";
+import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "Create Next App",
@@ -22,6 +23,7 @@ export default function RootLayout({ children }) {
           </PageTransition>
         </LayoutDef>
         <ScrollToTop />
+        <Footer />
       </body>
     </html>
   );

@@ -132,13 +132,27 @@ function CommandMenu({ isOpen, onClose }) {
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
 
-  const handleLocationSelect = (location) => {
+  const handleLocationSelect = async (location) => {
     console.log("Selected location:", location);
-    
-    // Navigate to search page with location coordinates
+
     if (typeof location === 'string') {
-      // This is a suggested location from database, we need to geocode it
-      router.push(`/search?q=${encodeURIComponent(location)}&type=location`);
+      // Geocode the location string using OpenStreetMap API
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&limit=1&countrycodes=in`
+        );
+        const data = await response.json();
+        if (data.length > 0) {
+          const loc = data[0];
+          router.push(`/search?q=${encodeURIComponent(location)}&type=location&lat=${loc.lat}&lon=${loc.lon}`);
+        } else {
+          // Fallback: just search by name if geocoding fails
+          router.push(`/search?q=${encodeURIComponent(location)}&type=location`);
+        }
+      } catch (err) {
+        // Fallback: just search by name if geocoding fails
+        router.push(`/search?q=${encodeURIComponent(location)}&type=location`);
+      }
     } else {
       // This is a location from OpenStreetMap with coordinates
       router.push(`/search?q=${encodeURIComponent(location.name)}&type=location&lat=${location.lat}&lon=${location.lon}`);
