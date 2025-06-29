@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { 
   MapPin, 
@@ -69,8 +69,6 @@ const PropertyDetailPage = () => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
-  const [mapInstance, setMapInstance] = useState(null);
-  const [carouselMapInstance, setCarouselMapInstance] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [contactForm, setContactForm] = useState({
@@ -79,6 +77,8 @@ const PropertyDetailPage = () => {
     email: '',
     message: ''
   });
+  const mapRef = useRef(null);
+  const carouselMapRef = useRef(null);
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -417,21 +417,21 @@ const PropertyDetailPage = () => {
     }
   }, [params.id]);
 
-  // Initialize map
+  // Main map effect
   useEffect(() => {
-    if (typeof window !== 'undefined' && property && !mapInstance && activeTab === "map") {
+    if (typeof window !== 'undefined' && property && activeTab === "map") {
       const initMap = async () => {
-        // Wait for the DOM to be ready
         await new Promise(resolve => setTimeout(resolve, 100));
-        
         const mapContainer = document.getElementById('property-map');
-        if (!mapContainer) {
-          console.log('Map container not found, retrying...');
-          return;
+        if (!mapContainer) return;
+
+        // Remove previous map instance if exists
+        if (mapRef.current) {
+          mapRef.current.remove();
+          mapRef.current = null;
         }
 
         const L = await import('leaflet');
-        
         const map = L.default.map('property-map', {
           center: property.location.coordinates,
           zoom: 15,
@@ -453,40 +453,35 @@ const PropertyDetailPage = () => {
           </div>
         `);
 
-        setMapInstance(map);
+        mapRef.current = map;
       };
 
       initMap();
 
       return () => {
-        if (mapInstance) mapInstance.remove();
+        if (mapRef.current) {
+          mapRef.current.remove();
+          mapRef.current = null;
+        }
       };
     }
-  }, [property, mapInstance, activeTab]);
+  }, [property, activeTab]);
 
-  // Cleanup map when switching away from map tab
+  // Carousel map effect
   useEffect(() => {
-    if (activeTab !== "map" && mapInstance) {
-      mapInstance.remove();
-      setMapInstance(null);
-    }
-  }, [activeTab, mapInstance]);
-
-  // Initialize carousel map
-  useEffect(() => {
-    if (typeof window !== 'undefined' && property && currentImageIndex === 0 && !carouselMapInstance) {
+    if (typeof window !== 'undefined' && property && currentImageIndex === 0) {
       const initCarouselMap = async () => {
-        // Wait for the DOM to be ready
         await new Promise(resolve => setTimeout(resolve, 100));
-        
         const mapContainer = document.getElementById('carousel-map');
-        if (!mapContainer) {
-          console.log('Carousel map container not found, retrying...');
-          return;
+        if (!mapContainer) return;
+
+        // Remove previous map instance if exists
+        if (carouselMapRef.current) {
+          carouselMapRef.current.remove();
+          carouselMapRef.current = null;
         }
 
         const L = await import('leaflet');
-        
         const map = L.default.map('carousel-map', {
           center: property.location.coordinates,
           zoom: 15,
@@ -508,16 +503,19 @@ const PropertyDetailPage = () => {
           </div>
         `);
 
-        setCarouselMapInstance(map);
+        carouselMapRef.current = map;
       };
 
       initCarouselMap();
 
       return () => {
-        if (carouselMapInstance) carouselMapInstance.remove();
+        if (carouselMapRef.current) {
+          carouselMapRef.current.remove();
+          carouselMapRef.current = null;
+        }
       };
     }
-  }, [property, currentImageIndex, carouselMapInstance]);
+  }, [property, currentImageIndex]);
 
   // Show loading component while fetching data
   if (loading) {
