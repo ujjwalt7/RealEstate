@@ -1,5 +1,5 @@
 "use client"
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { IoSearchOutline, IoLocationOutline, IoClose } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -45,6 +45,29 @@ function CommandMenu({ isOpen, onClose }) {
       setSelectedIndex(0);
     }
   }, [isOpen]);
+
+  const handleLocationSelect = useCallback(async (location) => {
+    console.log("Selected location:", location);
+    if (typeof location === 'string') {
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&limit=1&countrycodes=in`
+        );
+        const data = await response.json();
+        if (data.length > 0) {
+          const loc = data[0];
+          router.push(`/search?q=${encodeURIComponent(location)}&type=location&lat=${loc.lat}&lon=${loc.lon}`);
+        } else {
+          router.push(`/search?q=${encodeURIComponent(location)}&type=location`);
+        }
+      } catch (err) {
+        router.push(`/search?q=${encodeURIComponent(location)}&type=location`);
+      }
+    } else {
+      router.push(`/search?q=${encodeURIComponent(location.name)}&type=location&lat=${location.lat}&lon=${location.lon}`);
+    }
+    onClose();
+  }, [router, onClose]);
 
   // Handle keyboard navigation
   useEffect(() => {
@@ -131,34 +154,6 @@ function CommandMenu({ isOpen, onClose }) {
 
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
-
-  const handleLocationSelect = async (location) => {
-    console.log("Selected location:", location);
-
-    if (typeof location === 'string') {
-      // Geocode the location string using OpenStreetMap API
-      try {
-        const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&limit=1&countrycodes=in`
-        );
-        const data = await response.json();
-        if (data.length > 0) {
-          const loc = data[0];
-          router.push(`/search?q=${encodeURIComponent(location)}&type=location&lat=${loc.lat}&lon=${loc.lon}`);
-        } else {
-          // Fallback: just search by name if geocoding fails
-          router.push(`/search?q=${encodeURIComponent(location)}&type=location`);
-        }
-      } catch (err) {
-        // Fallback: just search by name if geocoding fails
-        router.push(`/search?q=${encodeURIComponent(location)}&type=location`);
-      }
-    } else {
-      // This is a location from OpenStreetMap with coordinates
-      router.push(`/search?q=${encodeURIComponent(location.name)}&type=location&lat=${location.lat}&lon=${location.lon}`);
-    }
-    onClose();
-  };
 
   const displayItems = searchResults.length > 0 ? searchResults : suggestedLocations;
   const isSearching = searchQuery.trim() !== "";
