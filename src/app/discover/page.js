@@ -9,6 +9,7 @@ import PropertyCardSkeleton from "@/components/Discover/PropertyCardSkeleton";
 import FilterPanel from "@/components/Discover/FilterPanel";
 import Pagination from "@/components/Discover/Pagination";
 import { propertyService } from "@/lib/propertyService";
+import { logEvent } from '@/lib/analytics';
 
 function Discover() {
   const searchParams = useSearchParams();
@@ -80,20 +81,39 @@ function Discover() {
         const result = await propertyService.getProperties(supabaseFilters, paginationParams);
         
         // Transform data to match the expected format
-        const transformedData = result.properties.map(property => ({
-          id: property.id,
-          title: property.title,
-          location: `${property.location?.locality}, ${property.location?.city}`,
-          price: `$${property.price?.amount?.toLocaleString()}`,
-          size: `${(property.dimensions?.area / 4046.86).toFixed(1)} acres`, // Convert sq m to acres
-          bedrooms: 0, // Plots don't have bedrooms
-          parking: property.parkingSpaces || 0,
-          type: property.type,
-          coordinates: property.location?.coordinates || [property.location?.latitude, property.location?.longitude],
-          image: property.images?.[0] || "/assets/img/house.png",
-          description: property.description,
-          features: property.features || []
-        }));
+        const transformedData = result.properties
+          .map(property => {
+            let coordinates = property.location?.coordinates;
+            if (
+              !coordinates &&
+              typeof property.location?.latitude === 'number' &&
+              typeof property.location?.longitude === 'number'
+            ) {
+              coordinates = [property.location.latitude, property.location.longitude];
+            }
+            return {
+              id: property.id,
+              title: property.title,
+              location: `${property.location?.locality}, ${property.location?.city}`,
+              price: `$${property.price?.amount?.toLocaleString()}`,
+              size: `${(property.dimensions?.area / 4046.86).toFixed(1)} acres`, // Convert sq m to acres
+              bedrooms: 0, // Plots don't have bedrooms
+              parking: property.parkingSpaces || 0,
+              type: property.type,
+              coordinates,
+              image: property.images?.[0] || "/assets/img/house.png",
+              description: property.description,
+              features: property.features || []
+            };
+          })
+          .filter(property =>
+            Array.isArray(property.coordinates) &&
+            property.coordinates.length === 2 &&
+            typeof property.coordinates[0] === "number" &&
+            typeof property.coordinates[1] === "number" &&
+            !isNaN(property.coordinates[0]) &&
+            !isNaN(property.coordinates[1])
+          );
 
         setProperties(transformedData);
         setFilteredProperties(transformedData);
@@ -258,9 +278,18 @@ function Discover() {
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
+    // Log pagination event
+    logEvent('pagination', { page: '/discover', metadata: { newPage } });
     // Scroll to top of property cards section
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  // Log filter usage
+  useEffect(() => {
+    if (filters) {
+      logEvent('filter_applied', { page: '/discover', metadata: filters });
+    }
+  }, [filters]);
 
   if (loading) {
     return (

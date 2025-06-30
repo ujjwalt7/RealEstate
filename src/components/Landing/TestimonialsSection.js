@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 const testimonials = [
   {
-    name: 'Priya Sharma',
+    name: 'Priyansh Sharma',
     image: User1,
     feedback: 'Varsha Infra made my first property purchase smooth and stress-free. Highly recommended for their professionalism and transparency!'
   },

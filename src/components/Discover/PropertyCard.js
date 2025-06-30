@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { IoLocationOutline, IoResizeOutline, IoCarOutline, IoCallOutline, IoMailOutline, IoEyeOutline, IoStarOutline, IoTimeOutline } from "react-icons/io5";
+import { logEvent } from '@/lib/analytics';
 
 function PropertyCard({ property, isHovered, isSelected, onHover, onLeave, onClick }) {
   const router = useRouter();
@@ -17,15 +18,14 @@ function PropertyCard({ property, isHovered, isSelected, onHover, onLeave, onCli
 
   const handleViewDetails = async (e) => {
     e.stopPropagation();
-    
+    // Log property view event
+    logEvent('property_view', { propertyId: property.id, page: `/property/${property.id}` });
     // Trigger click callback for map interaction
     if (onClick) {
       onClick(property.id);
     }
-
     // Add a small delay for the click animation
     await new Promise(resolve => setTimeout(resolve, 150));
-
     // Navigate to property detail page with smooth transition
     router.push(`/property/${property.id}`);
   };

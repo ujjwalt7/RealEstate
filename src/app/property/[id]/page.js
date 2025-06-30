@@ -449,7 +449,7 @@ const PropertyDetailPage = () => {
           <div class="property-popup">
             <h3 class="font-semibold text-gray-900">${property.title}</h3>
             <p class="text-gray-600 text-sm">${property.location.address}</p>
-            <p class="text-cyan-600 font-semibold">${property.price.amount.toLocaleString()} ${property.price.currency}</p>
+            <p class="text-cyan-600 font-semibold">${property.price?.amount ? property.price.amount.toLocaleString() : "-"} ${property.price?.currency}</p>
           </div>
         `);
 
@@ -499,7 +499,7 @@ const PropertyDetailPage = () => {
           <div class="property-popup">
             <h3 class="font-semibold text-gray-900">${property.title}</h3>
             <p class="text-gray-600 text-sm">${property.location.address}</p>
-            <p class="text-cyan-600 font-semibold">${property.price.amount.toLocaleString()} ${property.price.currency}</p>
+            <p class="text-cyan-600 font-semibold">${property.price?.amount ? property.price.amount.toLocaleString() : "-"} ${property.price?.currency}</p>
           </div>
         `);
 
@@ -816,7 +816,7 @@ const PropertyDetailPage = () => {
               whileHover={{ scale: 1.05 }}
             >
               <span className="px-4 py-2 rounded-full text-lg font-bold bg-white/95 text-borderDark shadow-lg">
-                {formatPrice(property.price.amount)}
+                {formatPrice(property.price?.amount)}
               </span>
             </motion.div>
           </div>
@@ -854,7 +854,7 @@ const PropertyDetailPage = () => {
                   <div className="flex items-center gap-4 text-sm text-gray-600">
                     <div className="flex items-center gap-1">
                       <IoResizeOutline className="w-4 h-4" />
-                      <span>{property.dimensions.areaSqFt.toLocaleString()} sq ft</span>
+                      <span>{property.dimensions?.areaSqFt ? property.dimensions.areaSqFt.toLocaleString() : "-"} sq ft</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <IoCarOutline className="w-4 h-4" />
@@ -867,7 +867,7 @@ const PropertyDetailPage = () => {
                   </div>
                   <div className="flex items-center gap-1 text-yellow-500">
                     <IoStarOutline className="w-4 h-4 fill-current" />
-                    <span className="text-sm font-medium">{property.contact.rating} ({property.contact.reviews} reviews)</span>
+                    <span className="text-sm font-medium">{property.contact?.rating} ({property.contact?.reviews} reviews)</span>
                   </div>
                 </div>
               </div>
@@ -932,19 +932,19 @@ const PropertyDetailPage = () => {
                         <h3 className="text-lg font-semibold text-gray-900 mb-3">Plot Dimensions</h3>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                           <div className="bg-gray-50 p-4 rounded-xl text-center">
-                            <div className="text-lg font-semibold text-gray-800">{property.dimensions.width}m × {property.dimensions.length}m</div>
+                            <div className="text-lg font-semibold text-gray-800">{property.dimensions?.width}m × {property.dimensions?.length}m</div>
                             <div className="text-sm text-gray-500 mt-1">Dimensions</div>
                           </div>
                           <div className="bg-gray-50 p-4 rounded-xl text-center">
-                            <div className="text-lg font-semibold text-gray-800">{property.dimensions.area} sq m</div>
+                            <div className="text-lg font-semibold text-gray-800">{property.dimensions?.area} sq m</div>
                             <div className="text-sm text-gray-500 mt-1">Area (sq m)</div>
                           </div>
                           <div className="bg-gray-50 p-4 rounded-xl text-center">
-                            <div className="text-lg font-semibold text-gray-800">{property.dimensions.areaSqFt.toLocaleString()} sq ft</div>
+                            <div className="text-lg font-semibold text-gray-800">{property.dimensions?.areaSqFt ? property.dimensions.areaSqFt.toLocaleString() : "-"} sq ft</div>
                             <div className="text-sm text-gray-500 mt-1">Area (sq ft)</div>
                           </div>
                           <div className="bg-gray-50 p-4 rounded-xl text-center">
-                            <div className="text-lg font-semibold text-gray-800">₹{property.price.perSqM.toLocaleString()}</div>
+                            <div className="text-lg font-semibold text-gray-800">₹{property.price?.perSqM ? property.price.perSqM.toLocaleString() : "-"}</div>
                             <div className="text-sm text-gray-500 mt-1">Per sq m</div>
                           </div>
                         </div>
@@ -1057,7 +1057,7 @@ const PropertyDetailPage = () => {
                         <div className="p-4 bg-gray-50 rounded-lg">
                           <h4 className="font-medium text-gray-900 mb-2">Payment Terms</h4>
                           <div className="space-y-2 text-sm">
-                            {property.price.paymentTerms?.map((term, index) => (
+                            {property.price?.paymentTerms?.map((term, index) => (
                               <div key={index} className="flex items-center gap-2">
                                 <div className="w-2 h-2 bg-accentYellow rounded-full"></div>
                                 <span className="text-gray-700">{term}</span>
@@ -1070,15 +1070,15 @@ const PropertyDetailPage = () => {
                           <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
                               <span className="text-gray-600">Total Price</span>
-                              <span className="font-medium">{formatPrice(property.price.amount)}</span>
+                              <span className="font-medium">{formatPrice(property.price?.amount)}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">Per sq ft</span>
-                              <span className="font-medium">₹{property.price.perSqFt.toLocaleString()}</span>
+                              <span className="font-medium">₹{property.price?.perSqFt ? property.price.perSqFt.toLocaleString() : "-"}</span>
                             </div>
                             <div className="flex justify-between">
                               <span className="text-gray-600">Per sq m</span>
-                              <span className="font-medium">₹{property.price.perSqM.toLocaleString()}</span>
+                              <span className="font-medium">₹{property.price?.perSqM ? property.price.perSqM.toLocaleString() : "-"}</span>
                             </div>
                           </div>
                         </div>
@@ -1098,17 +1098,17 @@ const PropertyDetailPage = () => {
               <div className="flex items-center gap-3 mb-4">
                 <Image
                   src={property.images?.[0] || "/assets/img/house.png"}
-                  alt={property.contact.agent}
+                  alt={property.contact?.agent}
                   width={48}
                   height={48}
                   className="w-12 h-12 rounded-full object-cover"
                 />
                 <div>
-                  <h4 className="font-medium text-gray-900">{property.contact.agent}</h4>
+                  <h4 className="font-medium text-gray-900">{property.contact?.agent}</h4>
                   <div className="flex items-center gap-1 text-sm text-gray-600">
                     <IoStarOutline className="w-3 h-3 fill-current text-yellow-500" />
-                    <span>{property.contact.rating}</span>
-                    <span>({property.contact.experience})</span>
+                    <span>{property.contact?.rating}</span>
+                    <span>({property.contact?.experience})</span>
                   </div>
                 </div>
               </div>
@@ -1138,7 +1138,7 @@ const PropertyDetailPage = () => {
                   <IoResizeOutline className="w-5 h-5 text-gray-600" />
                   <div>
                     <p className="text-sm text-gray-600">Land Area</p>
-                    <p className="font-medium text-gray-900">{property.dimensions.areaSqFt.toLocaleString()} sq ft</p>
+                    <p className="font-medium text-gray-900">{property.dimensions?.areaSqFt ? property.dimensions.areaSqFt.toLocaleString() : "-"}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">

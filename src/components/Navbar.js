@@ -23,7 +23,7 @@ function MaiNavbar() {
           <div className="lg:flex hidden items-center justify-start gap-5">
             <NavLinks title={"Home"} />
             <NavLinks title={"Discover"} link="/discover" />
-            <NavLinks title={"About Us"} />
+            <NavLinks title={"About Us"} link="/about" />
           </div>
         </div>
         <div className="w-full lg:flex px-4 items-center justify-center hidden">

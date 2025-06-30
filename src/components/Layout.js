@@ -4,6 +4,7 @@ import MaiNavbar from "./Navbar";
 import CommandMenu from "./Main/CommandMenu";
 import MobileNavMenu from "./MobileNavMenu";
 import { HiMenuAlt4 } from "react-icons/hi";
+import Footer from "./Footer";
 
 // Create context for command menu
 const CommandMenuContext = createContext();
@@ -43,6 +44,7 @@ function LayoutDef({children}) {
                 <main className="w-full h-full">{children}</main>
                 <CommandMenu isOpen={isCommandMenuOpen} onClose={closeCommandMenu} />
             </div>
+            <Footer />
         </CommandMenuContext.Provider>
     );
 }

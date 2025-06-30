@@ -194,4 +194,66 @@ INSERT INTO properties (
     'This premium residential plot is located in the heart of Andheri West, one of Mumbai''s most sought-after residential areas. The plot offers excellent connectivity to major landmarks and is perfect for building your dream home. The area is well-developed with all modern amenities and infrastructure.',
     ARRAY['Prime location with excellent connectivity', 'Ready for immediate construction', 'All legal documents verified', 'Excellent investment potential', 'High rental yield area'],
     NOW()
-); 
+);
+
+-- Analytics Events Table
+create table if not exists analytics_events (
+  id uuid primary key default uuid_generate_v4(),
+  event_type text not null,
+  user_id uuid references users(id),
+  property_id text,
+  page text,
+  metadata jsonb,
+  created_at timestamp with time zone default now()
+);
+
+-- Property Views Over Time (daily)
+create or replace function property_views_over_time()
+returns table(date date, views integer)
+language sql as $$
+  select
+    date_trunc('day', created_at)::date as date,
+    count(*) as views
+  from analytics_events
+  where event_type = 'property_view'
+  group by date
+  order by date;
+$$;
+
+-- User Activity Over Time (daily)
+create or replace function user_activity_over_time()
+returns table(date date, activity integer)
+language sql as $$
+  select
+    date_trunc('day', created_at)::date as date,
+    count(*) as activity
+  from analytics_events
+  group by date
+  order by date;
+$$;
+
+-- Top Properties by Views
+create or replace function top_properties_by_views()
+returns table(title text, views integer)
+language sql as $$
+  select
+    p.title,
+    count(a.id) as views
+  from analytics_events a
+  join properties p on a.property_id = p.id
+  where a.event_type = 'property_view'
+  group by p.title
+  order by views desc
+  limit 10;
+$$;
+
+-- Conversion Funnel (view -> contact_submit -> save)
+create or replace function conversion_funnel()
+returns table(stage text, count integer)
+language sql as $$
+  select 'Viewed' as stage, count(*) from analytics_events where event_type = 'property_view'
+  union all
+  select 'Contacted', count(*) from analytics_events where event_type = 'contact_submit'
+  union all
+  select 'Saved', count(*) from analytics_events where event_type = 'property_save';
+$$; 
