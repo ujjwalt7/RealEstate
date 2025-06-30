@@ -53,12 +53,12 @@ export default function AboutPage() {
           <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
             <ShieldCheck className="w-12 h-12 text-accentYellow mb-2" />
             <h3 className="font-semibold text-lg mt-3 mb-1">Trust & Integrity</h3>
-            <p className="text-gray-600 text-sm">We believe in honest, transparent dealings and always put our clients' interests first.</p>
+            <p className="text-gray-600 text-sm">We believe in honest, transparent dealings and always put our clients interests first.</p>
           </div>
           <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
             <Award className="w-12 h-12 text-accentYellow mb-2" />
             <h3 className="font-semibold text-lg mt-3 mb-1">Expertise & Results</h3>
-            <p className="text-gray-600 text-sm">Our experienced team delivers results, whether you're buying, selling, or investing.</p>
+            <p className="text-gray-600 text-sm">Our experienced team delivers results, whether youre buying, selling, or investing.</p>
           </div>
           <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
             <HeartHandshake className="w-12 h-12 text-accentYellow mb-2" />

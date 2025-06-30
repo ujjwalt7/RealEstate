@@ -2,6 +2,10 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { supabase } from "@/lib/supabase";
+import { Button } from "@/components/ui/button";
 
 const navLinks = [
   { href: "/admin/dashboard", label: "Dashboard" },
@@ -12,6 +16,49 @@ const navLinks = [
 
 export default function AdminLayout({ children }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [loading, setLoading] = useState(true);
+  const [session, setSession] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+    async function checkSession() {
+      const { data } = await supabase.auth.getSession();
+      if (!ignore) {
+        setSession(data.session);
+        setLoading(false);
+        if (!data.session) {
+          router.replace("/admin/login");
+        }
+      }
+    }
+    checkSession();
+    // Listen for auth changes
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+      if (!session) {
+        router.replace("/admin/login");
+      }
+    });
+    return () => {
+      ignore = true;
+      listener?.subscription.unsubscribe();
+    };
+  }, [router]);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    router.replace("/admin/login");
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-accentYellow"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex min-h-screen bg-gray-50">
       {/* Sidebar */}
@@ -53,7 +100,14 @@ export default function AdminLayout({ children }) {
       {/* Main Content */}
       <main className="flex-1 flex flex-col min-h-screen">
         {/* Header */}
-        <header className="h-16 bg-white border-b flex items-center px-6 font-semibold text-lg sticky top-0 z-10">Admin Dashboard</header>
+        <header className="h-16 bg-white border-b flex items-center px-6 font-semibold text-lg sticky top-0 z-10 justify-between">
+          <span>Admin Dashboard</span>
+          {session && (
+            <Button variant="outline" size="sm" onClick={handleLogout}>
+              Logout
+            </Button>
+          )}
+        </header>
         <div className="flex-1 p-6 pt-4">{children}</div>
       </main>
     </div>
