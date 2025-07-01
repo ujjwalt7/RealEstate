@@ -1,12 +1,15 @@
 "use client";
-import AwardSection from '@/components/Landing/AwardSection';
+import AwardSection from "@/components/Landing/AwardSection";
 import TrustSection from '@/components/Landing/TrustSection';
 import TestimonialsSection from '@/components/Landing/TestimonialsSection';
 import BrandsMarquee from '@/components/Landing/BrandsMarquee';
 import Image from 'next/image';
-import { ShieldCheck, Award, HeartHandshake } from 'lucide-react';
+// import Logo from '@/assets/img/logo.svg'
+const logoPath = '/assets/img/logo.svg';
+// import { ShieldCheck, Award, Heart } from 'lucide-react';
+import { BiSolidDonateHeart, BiSolidShieldX, BiSolidTrophy } from "react-icons/bi";
 
-export default function AboutPage() {
+export default function About() {
   return (
     <div className="w-full min-h-screen bg-gray-50 pb-12">
       {/* Hero Section */}
@@ -24,23 +27,15 @@ export default function AboutPage() {
           </ul>
         </div>
         <div className="flex-1 flex justify-center md:justify-end">
-          <Image src="/assets/img/mascot.svg" alt="Varsha Infra Team" width={260} height={260} className="rounded-2xl shadow-lg bg-white p-4" />
+          {/* <img src={logoPath} alt="Varsha Infra Team"className="rounded-2xl shadow-lg bg-white p-4" /> */}
         </div>
       </div>
 
-      {/* Awards & Trust */}
       <div className="max-w-[95%] mx-auto px-4">
         <AwardSection />
         <TrustSection />
       </div>
 
-      {/* Brands/Partners */}
-      <div className="max-w-full mx-auto px-4 py-8">
-        <h2 className="text-2xl font-bold text-borderDark mb-4 text-center">Our Esteemed Partners</h2>
-        <BrandsMarquee />
-      </div>
-
-      {/* Testimonials */}
       <div className="max-w-5xl mx-auto px-4 py-8">
         <h2 className="text-2xl font-bold text-borderDark mb-4 text-center">What Our Clients Say</h2>
         <TestimonialsSection />
@@ -51,17 +46,17 @@ export default function AboutPage() {
         <h2 className="text-2xl font-bold text-borderDark mb-4">Our Mission & Values</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
-            <ShieldCheck className="w-12 h-12 text-accentYellow mb-2" />
+            <BiSolidShieldX className="w-12 h-12 text-accentYellow mb-2" />
             <h3 className="font-semibold text-lg mt-3 mb-1">Trust & Integrity</h3>
             <p className="text-gray-600 text-sm">We believe in honest, transparent dealings and always put our clients interests first.</p>
           </div>
           <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
-            <Award className="w-12 h-12 text-accentYellow mb-2" />
+            <BiSolidTrophy className="w-12 h-12 text-accentYellow mb-2" />
             <h3 className="font-semibold text-lg mt-3 mb-1">Expertise & Results</h3>
             <p className="text-gray-600 text-sm">Our experienced team delivers results, whether youre buying, selling, or investing.</p>
           </div>
           <div className="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
-            <HeartHandshake className="w-12 h-12 text-accentYellow mb-2" />
+            <BiSolidDonateHeart className="w-12 h-12 text-accentYellow mb-2" />
             <h3 className="font-semibold text-lg mt-3 mb-1">Care & Community</h3>
             <p className="text-gray-600 text-sm">We care about our clients and our community, supporting local causes and building lasting relationships.</p>
           </div>

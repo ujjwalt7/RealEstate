@@ -9,7 +9,7 @@ function Home() {
   return (
     <div className="w-full rounded-t-[5rem] overflow-hidden grid grid-cols-1 gap-8">
       <Starter />
-      <BrandsMarquee />
+      {/* <BrandsMarquee /> */}
       <TrustSection />
       <MoreSections />
       <AwardSection />

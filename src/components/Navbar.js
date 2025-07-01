@@ -1,7 +1,9 @@
 import Image from "next/image";
 import Logo from "@/assets/img/logo.svg";
-import NavLinks from "./Main/Small/NavLinks";import { BiSolidPhoneCall } from "react-icons/bi";
-import SearchBarNav from "./Main/SeachBarNav";import { HiMenuAlt4 } from "react-icons/hi";
+import NavLinks from "./Main/Small/NavLinks";
+import { BiSolidPhoneCall } from "react-icons/bi";
+import SearchBarNav from "./Main/SeachBarNav";
+import { HiMenuAlt4 } from "react-icons/hi";
 function MaiNavbar() {
   return (
     <div className="w-full top-0 left-0 sticky flex justify-center items-center flex-col gap-1 z-[9999] bg-white/80 backdrop-blur-sm">
