@@ -6,6 +6,7 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/lib/supabase";
 import Image from 'next/image';
+import { FaSpinner } from "react-icons/fa"; // Add at the top for spinner
 
 // --- Zod Schema (matches your DB schema, with reasonable defaults for add) ---
 const propertySchema = z.object({
@@ -96,18 +97,18 @@ export default function AddPropertyPage() {
       description: "",
       highlights: [],
       tags: [],
-      dimensions: {},
-      location: {},
-      price: {},
+      dimensions: { area: "", length: "", width: "", units: "" },
+      location: { address: "", city: "", state: "", pincode: "", lat: "", lng: "" },
+      price: { amount: "", currency: "", breakdown: "" },
       features: [],
       amenities: [],
       documents: [],
-      contact: {},
+      contact: { name: "", phone: "", email: "" },
       images: [],
       nearby_properties: [],
       zoning: "",
       soil_type: "",
-      road_width: undefined,
+      road_width: "",
       facing: "",
       slope: "",
       water_table: "",
@@ -116,18 +117,18 @@ export default function AddPropertyPage() {
       sewage: false,
       internet: false,
       security: false,
-      parking_spaces: 0,
+      parking_spaces: "",
       construction_allowed: true,
-      floor_area_ratio: undefined,
-      building_height: undefined,
-      setback: {},
-      environmental_factors: {},
-      investment_potential: {},
-      legal_status: {},
-      infrastructure: {},
-      future_plans: {},
+      floor_area_ratio: "",
+      building_height: "",
+      setback: { front: "", rear: "", side: "" },
+      environmental_factors: { flood: "", pollution: "" },
+      investment_potential: { score: "", notes: "" },
+      legal_status: { clear: false, notes: "" },
+      infrastructure: { roads: "", transport: "" },
+      future_plans: { plans: "" },
       similar_properties: [],
-      market_data: {},
+      market_data: { trend: "", price_index: "" },
     },
   });
 
@@ -169,55 +170,13 @@ export default function AddPropertyPage() {
   const onSubmit = async (values) => {
     setSubmitError("");
     setSubmitSuccess("");
+    // Remove id if present
+    const insertValues = { ...values };
+    delete insertValues.id;
     // Insert property
-    const { error } = await supabase.from("properties").insert([{ ...values }]);
+    const { error } = await supabase.from("properties").insert([insertValues]);
     if (error) setSubmitError(error.message);
     else setSubmitSuccess("Property added successfully!");
-  };
-
-  // --- Image Upload Handler ---
-  const handleImageUpload = async (e) => {
-    setUploading(true);
-    setUploadProgress(0);
-    const files = Array.from(e.target.files);
-    const uploaded = [];
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const filePath = `${Date.now()}-${file.name}`;
-      const { data, error } = await supabase.storage.from("property-images").upload(filePath, file, { upsert: true });
-      if (!error) {
-        const { data: urlData } = supabase.storage.from("property-images").getPublicUrl(filePath);
-        uploaded.push(urlData.publicUrl);
-        setUploadProgress(Math.round(((i + 1) / files.length) * 100));
-        showToast(`Uploaded ${file.name}`, "success");
-      } else {
-        showToast(`Failed to upload ${file.name}`, "error");
-      }
-    }
-    // Update form images array
-    const current = getValues("images") || [];
-    setValue("images", [...current, ...uploaded]);
-    imageInputRef.current.value = "";
-    setUploading(false);
-    setUploadProgress(0);
-  };
-
-  // --- Remove Image Handler ---
-  const handleRemoveImage = async (url) => {
-    setUploading(true);
-    // Extract file path from public URL
-    const path = url.split("/property-images/")[1];
-    if (path) {
-      const { error } = await supabase.storage.from("property-images").remove([path]);
-      if (!error) {
-        showToast("Image deleted", "success");
-        const current = getValues("images") || [];
-        setValue("images", current.filter((img) => img !== url));
-      } else {
-        showToast("Failed to delete image", "error");
-      }
-    }
-    setUploading(false);
   };
 
   // --- Document Upload Handler ---
@@ -268,6 +227,80 @@ export default function AddPropertyPage() {
   // --- UI ---
   const imageInputRef = useRef();
   const docInputRef = useRef();
+
+  const IMAGE_BUCKET = process.env.NEXT_PUBLIC_IMAGE_BUCKET || "property-images";
+  const MAX_IMAGES = 10;
+  const MAX_IMAGE_SIZE_MB = 5;
+
+  // --- Image Upload Handler (with drag-and-drop, validation, preview) ---
+  const [dragActive, setDragActive] = useState(false);
+  const [imageErrors, setImageErrors] = useState([]);
+
+  const handleImageFiles = async (files) => {
+    setImageErrors([]);
+    const current = getValues("images") || [];
+    if (current.length + files.length > MAX_IMAGES) {
+      setImageErrors([`You can upload up to ${MAX_IMAGES} images.`]);
+      return;
+    }
+    const validFiles = [];
+    for (let file of files) {
+      if (!file.type.startsWith("image/")) {
+        setImageErrors((errs) => [...errs, `${file.name} is not an image.`]);
+        continue;
+      }
+      if (file.size > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
+        setImageErrors((errs) => [...errs, `${file.name} is too large (max ${MAX_IMAGE_SIZE_MB}MB).`]);
+        continue;
+      }
+      validFiles.push(file);
+    }
+    if (validFiles.length === 0) return;
+    setUploading(true);
+    setUploadProgress(0);
+    const uploaded = [];
+    for (let i = 0; i < validFiles.length; i++) {
+      const file = validFiles[i];
+      const filePath = `${Date.now()}-${file.name}`;
+      const { data, error } = await supabase.storage.from(IMAGE_BUCKET).upload(filePath, file, { upsert: true });
+      if (!error) {
+        const { data: urlData } = supabase.storage.from(IMAGE_BUCKET).getPublicUrl(filePath);
+        uploaded.push(urlData.publicUrl);
+        setUploadProgress(Math.round(((i + 1) / validFiles.length) * 100));
+        showToast(`Uploaded ${file.name}`, "success");
+      } else {
+        showToast(`Failed to upload ${file.name}`, "error");
+      }
+    }
+    setValue("images", [...current, ...uploaded]);
+    imageInputRef.current.value = "";
+    setUploadProgress(100); // Set to 100% on success
+    setTimeout(() => {
+      setUploading(false);
+      setUploadProgress(0);
+    }, 600); // Show 100% for 600ms
+  };
+
+  const handleImageUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    await handleImageFiles(files);
+  };
+
+  const handleDrop = async (e) => {
+    e.preventDefault();
+    setDragActive(false);
+    const files = Array.from(e.dataTransfer.files);
+    await handleImageFiles(files);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setDragActive(true);
+  };
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setDragActive(false);
+  };
 
   return (
     <div className="max-w-4xl mx-auto py-8">
@@ -513,16 +546,37 @@ export default function AddPropertyPage() {
           {/* Image Upload */}
           <div>
             <label className="block font-medium mb-1">Property Images</label>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              ref={imageInputRef}
-              onChange={handleImageUpload}
-              className="mb-2"
-              disabled={isSubmitting || uploading}
-            />
-            {uploading && uploadProgress > 0 && (
+            <div
+              className={`mb-2 border-2 border-dashed rounded p-4 text-center cursor-pointer ${dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"}`}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onClick={() => imageInputRef.current && imageInputRef.current.click()}
+              style={{ minHeight: 80 }}
+            >
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                ref={imageInputRef}
+                onChange={handleImageUpload}
+                className="hidden"
+                disabled={isSubmitting || uploading}
+              />
+              <div className="text-gray-500">Drag & drop images here, or click to select (max {MAX_IMAGES})</div>
+              {imageErrors.length > 0 && (
+                <ul className="text-red-500 text-xs mt-2">
+                  {imageErrors.map((err, idx) => <li key={idx}>{err}</li>)}
+                </ul>
+              )}
+            </div>
+            {uploading && (
+              <div className="flex items-center gap-2 mb-2">
+                <FaSpinner className="animate-spin text-blue-500" />
+                <span className="text-blue-600 font-medium">Uploading…</span>
+              </div>
+            )}
+            {uploading && (
               <div className="w-full bg-gray-200 rounded h-2 mb-2">
                 <div className="bg-blue-500 h-2 rounded" style={{ width: `${uploadProgress}%` }}></div>
               </div>

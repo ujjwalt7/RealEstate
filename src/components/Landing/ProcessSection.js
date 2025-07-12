@@ -84,7 +84,7 @@ export default function ProcessSection() {
           </h2>
           <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto">
             Our proven 4-step process ensures a seamless and transparent property acquisition experience. 
-            From discovery to closure, we're with you every step of the way.
+            From discovery to closure, we&apos;re with you every step of the way.
           </p>
         </motion.div>
 

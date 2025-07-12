@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Quote, Star, MapPin, Clock } from "lucide-react";
+import Image from 'next/image';
 
 const successStories = [
   {
@@ -89,7 +90,7 @@ export default function SuccessStories() {
           </h2>
           <p className="text-lg lg:text-xl text-gray-600 max-w-3xl mx-auto">
             Real stories from real clients who have achieved their real estate dreams with Varsha Infra. 
-            Discover how we've helped transform their property investments into success stories.
+            Discover how we&apos;ve helped transform their property investments into success stories.
           </p>
         </motion.div>
 
@@ -112,9 +113,11 @@ export default function SuccessStories() {
               {/* Client Info */}
               <div className="flex items-center gap-4 mb-6">
                 <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-200">
-                  <img 
-                    src={story.image} 
+                  <Image
+                    src={story.image}
                     alt={story.clientName}
+                    width={64}
+                    height={64}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -134,7 +137,7 @@ export default function SuccessStories() {
               <div className="mb-6">
                 <Quote className="w-8 h-8 text-accentYellow mb-3" />
                 <p className="text-gray-600 leading-relaxed italic">
-                  "{story.story}"
+                  &quot;{story.story}&quot;
                 </p>
               </div>
 

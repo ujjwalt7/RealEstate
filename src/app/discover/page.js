@@ -427,12 +427,12 @@ function Discover() {
           </div>
 
           {/* Filter Panel */}
-          <FilterPanel 
-            filters={filters} 
-            setFilters={setFilters}
-            onClose={() => setIsFilterOpen(false)}
+                <FilterPanel 
+                  filters={filters} 
+                  setFilters={setFilters}
+                  onClose={() => setIsFilterOpen(false)}
             isOpen={isFilterOpen}
-          />
+                />
 
           {/* Property Cards Grid */}
           <div className="flex-1 overflow-y-auto p-3 lg:p-6">

@@ -1,6 +1,7 @@
 "use client"
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 
 export default function SettingsPage() {
   // Placeholder state for each section
@@ -36,7 +37,7 @@ export default function SettingsPage() {
         </div>
         {/* Avatar upload placeholder */}
         <div className="flex items-center gap-4 mt-2">
-          <img src={profile.avatar || '/assets/img/mascot.svg'} alt="Avatar" className="w-12 h-12 rounded-full object-cover border" />
+          <Image src={profile.avatar || '/assets/img/mascot.svg'} alt="Avatar" width={48} height={48} className="w-12 h-12 rounded-full object-cover border" />
           <Button variant="outline" size="sm">Change Avatar</Button>
         </div>
         <Button className="mt-4" onClick={handleProfileSave}>Save Profile</Button>
@@ -51,7 +52,7 @@ export default function SettingsPage() {
         </div>
         {/* Logo upload placeholder */}
         <div className="flex items-center gap-4 mt-2">
-          <img src={site.logo || '/assets/img/logo.svg'} alt="Logo" className="w-16 h-16 rounded object-cover border" />
+          <Image src={site.logo || '/assets/img/logo.svg'} alt="Logo" width={64} height={64} className="w-16 h-16 rounded object-cover border" />
           <Button variant="outline" size="sm">Change Logo</Button>
         </div>
         <Button className="mt-4" onClick={handleSiteSave}>Save Site Settings</Button>

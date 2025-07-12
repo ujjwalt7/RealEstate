@@ -1,6 +1,7 @@
 "use client"
 import { motion } from "framer-motion";
 import { Linkedin, Mail, Phone } from "lucide-react";
+import Image from 'next/image';
 
 const teamMembers = [
   {
@@ -124,9 +125,11 @@ export default function TeamSection() {
                 {/* Profile Image */}
                 <div className="relative mb-6">
                   <div className="w-32 h-32 mx-auto rounded-full overflow-hidden bg-gray-200 group-hover:scale-105 transition-transform duration-300">
-                    <img 
-                      src={member.image} 
+                    <Image
+                      src={member.image}
                       alt={member.name}
+                      width={128}
+                      height={128}
                       className="w-full h-full object-cover"
                     />
                   </div>

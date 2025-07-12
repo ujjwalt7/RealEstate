@@ -106,7 +106,7 @@ export default function StatsSection() {
             Trusted by <span className="text-white">Thousands</span>
           </h2>
           <p className="text-lg lg:text-xl text-borderDark/80 max-w-3xl mx-auto">
-            Our track record speaks for itself. We've helped countless clients achieve their real estate dreams 
+            Our track record speaks for itself. We&apos;ve helped countless clients achieve their real estate dreams 
             with transparency, expertise, and unwavering commitment to excellence.
           </p>
         </motion.div>
