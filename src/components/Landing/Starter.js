@@ -3,7 +3,6 @@ import Image from "next/image";
 import BgLanding from '@/assets/img/bg.svg';
 import SearchBarNav from "../Main/SeachBarNav";
 import { useState, useEffect } from "react";
-import Mascot from "../Main/Mascot";
 
 const words = ["Home", "Office", "Investment", "Future", "Dream","Plot","Business Space","Future Asset"];
 
@@ -52,9 +51,6 @@ function Starter() {
                 <div className="lg:w-3/5 w-full px-6">
                 <SearchBarNav/>
                 </div>
-                </div>
-                <div className="w-3/12 aspect-square flex justify-end items-end -scale-x-100 absolute bottom-0 right-0">
-                    <Mascot />
                 </div>
             </div>
         </div>

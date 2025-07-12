@@ -1,6 +1,5 @@
 "use client"
 import { IoSearchOutline } from "react-icons/io5";
-import Mascot from "./Mascot";
 import { useCommandMenu } from "../Layout";
 
 function SearchBarNav() {
@@ -16,7 +15,7 @@ function SearchBarNav() {
             onClick={handleClick}
         >
             <div className="w-12 h-12 flex items-center justify-center px-1">
-              <Mascot />
+              {/* Removed Mascot widget */}
             </div>
             <input
               type="text"

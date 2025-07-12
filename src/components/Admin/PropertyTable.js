@@ -21,6 +21,7 @@ export default function PropertyTable() {
   const [formInitial, setFormInitial] = useState(null);
   const [viewProperty, setViewProperty] = useState(null);
   const router = useRouter();
+  const [selected, setSelected] = useState([]);
 
   const fetchProperties = async () => {
     setLoading(true);
@@ -83,6 +84,50 @@ export default function PropertyTable() {
     else alert(error.message);
   };
 
+  // Bulk Delete
+  const handleBulkDelete = async () => {
+    if (selected.length === 0) return;
+    if (!window.confirm(`Are you sure you want to delete ${selected.length} properties? This cannot be undone.`)) return;
+    try {
+      const { data, error } = await supabase.from("properties").delete().in("id", selected);
+      if (error) {
+        console.error("Bulk delete error:", error);
+        alert(error.message);
+      } else {
+        setSelected([]);
+        fetchProperties();
+        if (!data || data.length === 0) {
+          alert("No properties were deleted. Check your Supabase RLS policies or permissions.");
+        }
+      }
+    } catch (err) {
+      console.error("Bulk delete exception:", err);
+      alert("Bulk delete failed: " + err.message);
+    }
+  };
+
+  // Delete ALL properties
+  const handleDeleteAll = async () => {
+    if (!window.confirm("Are you sure you want to delete ALL properties? This cannot be undone.")) return;
+    const { error } = await supabase.from("properties").delete().neq("id", null);
+    if (!error) {
+      setSelected([]);
+      fetchProperties();
+    } else {
+      alert(error.message);
+    }
+  };
+
+  // Checkbox helpers
+  const isAllSelected = properties.length > 0 && selected.length === properties.length;
+  const toggleSelectAll = () => {
+    if (isAllSelected) setSelected([]);
+    else setSelected(properties.map(p => p.id));
+  };
+  const toggleSelect = (id) => {
+    setSelected(sel => sel.includes(id) ? sel.filter(sid => sid !== id) : [...sel, id]);
+  };
+
   // View Modal
   const PropertyViewModal = ({ property, onClose }) => (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
@@ -127,14 +172,25 @@ export default function PropertyTable() {
             ))}
           </select>
         </div>
-        <Link href="/admin/properties/add">
-          <Button size="sm" className="mt-2 md:mt-0">Add Property</Button>
-        </Link>
+        <div className="flex gap-2">
+          <Button size="sm" variant="destructive" disabled={selected.length === 0} onClick={handleBulkDelete}>
+            Bulk Delete
+          </Button>
+          <Button size="sm" variant="destructive" onClick={handleDeleteAll}>
+            Delete All
+          </Button>
+          <Link href="/admin/properties/add">
+            <Button size="sm" className="mt-2 md:mt-0">Add Property</Button>
+          </Link>
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm">
           <thead>
             <tr className="bg-gray-100">
+              <th className="px-2 py-2 text-left">
+                <input type="checkbox" checked={isAllSelected} onChange={toggleSelectAll} />
+              </th>
               <th className="px-4 py-2 text-left">Title</th>
               <th className="px-4 py-2 text-left">Type</th>
               <th className="px-4 py-2 text-left">Status</th>
@@ -146,14 +202,21 @@ export default function PropertyTable() {
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={7} className="text-center py-8">Loading...</td></tr>
+              <tr><td colSpan={8} className="text-center py-8">Loading...</td></tr>
             ) : error ? (
-              <tr><td colSpan={7} className="text-center text-red-500 py-8">{error}</td></tr>
+              <tr><td colSpan={8} className="text-center text-red-500 py-8">{error}</td></tr>
             ) : properties.length === 0 ? (
-              <tr><td colSpan={7} className="text-center py-8">No properties found.</td></tr>
+              <tr><td colSpan={8} className="text-center py-8">No properties found.</td></tr>
             ) : (
               properties.map(property => (
                 <tr key={property.id} className="border-b">
+                  <td className="px-2 py-2">
+                    <input
+                      type="checkbox"
+                      checked={selected.includes(property.id)}
+                      onChange={() => toggleSelect(property.id)}
+                    />
+                  </td>
                   <td className="px-4 py-2">{property.title}</td>
                   <td className="px-4 py-2 capitalize">{property.type}</td>
                   <td className="px-4 py-2 capitalize">{property.status}</td>

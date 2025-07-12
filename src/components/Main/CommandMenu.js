@@ -3,7 +3,6 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { IoSearchOutline, IoLocationOutline, IoClose } from "react-icons/io5";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import Mascot from "./Mascot";
 
 function CommandMenu({ isOpen, onClose }) {
   const [searchQuery, setSearchQuery] = useState("");
@@ -180,7 +179,7 @@ function CommandMenu({ isOpen, onClose }) {
         {/* Header */}
         <div className="flex items-center p-4 border-b border-gray-100">
           <div className="w-10 h-10 flex items-center justify-center mr-3">
-            <Mascot />
+            {/* Removed Mascot component */}
           </div>
           <div className="flex-1">
             <input
