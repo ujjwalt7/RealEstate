@@ -111,38 +111,78 @@ function Discover() {
         // Transform data to match the expected format
         const transformedData = result.properties
           .map(property => {
-            let coordinates = property.location?.coordinates;
-            if (
-              !coordinates &&
-              typeof property.location?.latitude === 'number' &&
-              typeof property.location?.longitude === 'number'
-            ) {
+            // Handle coordinates - check multiple possible formats
+            let coordinates = null;
+            if (property.location?.coordinates) {
+              coordinates = property.location.coordinates;
+            } else if (property.location?.latitude && property.location?.longitude) {
               coordinates = [property.location.latitude, property.location.longitude];
+            } else if (property.location?.lat && property.location?.lng) {
+              coordinates = [property.location.lat, property.location.lng];
             }
+            
+            // Handle location string - use available data
+            let locationString = '';
+            if (property.location?.locality && property.location?.city) {
+              locationString = `${property.location.locality}, ${property.location.city}`;
+            } else if (property.location?.city) {
+              locationString = property.location.city;
+            } else if (property.location?.state) {
+              locationString = property.location.state;
+            } else if (property.location?.address) {
+              locationString = property.location.address;
+            } else {
+              locationString = 'Location available';
+            }
+            
+            // Handle price formatting
+            let priceString = '';
+            if (property.price?.amount) {
+              if (property.price.currency === 'Cr') {
+                priceString = `₹${(property.price.amount / 10000000).toFixed(2)} Cr`;
+              } else {
+                priceString = `₹${property.price.amount.toLocaleString()}`;
+              }
+            } else {
+              priceString = 'Price on request';
+            }
+            
+            // Handle size conversion
+            let sizeString = '';
+            if (property.dimensions?.area) {
+              const acres = property.dimensions.area / 4046.86; // Convert sq m to acres
+              sizeString = `${acres.toFixed(1)} acres`;
+            } else if (property.dimensions?.units) {
+              sizeString = property.dimensions.units;
+            } else {
+              sizeString = 'Size available';
+            }
+            
             return {
               id: property.id,
-              title: property.title,
-              location: `${property.location?.locality}, ${property.location?.city}`,
-              price: `$${property.price?.amount?.toLocaleString()}`,
-              size: `${(property.dimensions?.area / 4046.86).toFixed(1)} acres`, // Convert sq m to acres
+              title: property.title || 'Property',
+              location: locationString,
+              price: priceString,
+              size: sizeString,
               bedrooms: 0, // Plots don't have bedrooms
               parking: property.parkingSpaces || 0,
-              type: property.type,
+              type: property.type || 'residential',
               coordinates,
               image: property.images?.[0] || "/assets/img/house.png",
-              description: property.description,
+              description: property.description || 'Description available',
               features: property.features || []
             };
           })
-          .filter(property =>
-            Array.isArray(property.coordinates) &&
-            property.coordinates.length === 2 &&
-            typeof property.coordinates[0] === "number" &&
-            typeof property.coordinates[1] === "number" &&
-            !isNaN(property.coordinates[0]) &&
-            !isNaN(property.coordinates[1])
-          );
+          .filter(property => {
+            // Only filter out properties without coordinates if coordinates are required
+            // For now, let's show all properties even without coordinates
+            return true;
+          });
 
+        console.log('Transformed properties:', transformedData);
+        console.log('Original properties count:', result.properties.length);
+        console.log('Transformed properties count:', transformedData.length);
+        
         setProperties(transformedData);
         setFilteredProperties(transformedData);
         setPagination(result.pagination);
@@ -236,20 +276,21 @@ function Discover() {
   useEffect(() => {
     if (properties.length === 0) return;
 
+    console.log('Sorting properties:', properties.length);
     let sorted = [...properties];
     
     switch (filters.sortBy) {
       case "price-asc":
         sorted.sort((a, b) => {
-          const priceA = parseInt(a.price.replace(/[$,]/g, ""));
-          const priceB = parseInt(b.price.replace(/[$,]/g, ""));
+          const priceA = parseInt(a.price.replace(/[₹$,]/g, ""));
+          const priceB = parseInt(b.price.replace(/[₹$,]/g, ""));
           return priceA - priceB;
         });
         break;
       case "price-desc":
         sorted.sort((a, b) => {
-          const priceA = parseInt(a.price.replace(/[$,]/g, ""));
-          const priceB = parseInt(b.price.replace(/[$,]/g, ""));
+          const priceA = parseInt(a.price.replace(/[₹$,]/g, ""));
+          const priceB = parseInt(b.price.replace(/[₹$,]/g, ""));
           return priceB - priceA;
         });
         break;
@@ -275,6 +316,7 @@ function Discover() {
         break;
     }
     
+    console.log('Setting filtered properties:', sorted.length);
     setFilteredProperties(sorted);
   }, [properties, filters.sortBy]);
 
@@ -436,7 +478,7 @@ function Discover() {
 
           {/* Property Cards Grid */}
           <div className="flex-1 overflow-y-auto p-3 lg:p-6">
-            <div className="grid grid-cols-1 px-8 lg:px-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
               {pageLoading ? (
                 // Show skeleton loading during pagination
                 Array.from({ length: 12 }).map((_, index) => (
@@ -444,17 +486,20 @@ function Discover() {
                 ))
               ) : (
                 // Show actual property cards
-                filteredProperties.map((property) => (
-                  <PropertyCard
-                    key={property.id}
-                    property={property}
-                    isHovered={hoveredPropertyId === property.id}
-                    isSelected={selectedPropertyId === property.id}
-                    onHover={handlePropertyHover}
-                    onLeave={handlePropertyLeave}
-                    onClick={handlePropertyClick}
-                  />
-                ))
+                (() => {
+                  console.log('Rendering property cards:', filteredProperties.length);
+                  return filteredProperties.map((property) => (
+                    <PropertyCard
+                      key={property.id}
+                      property={property}
+                      isHovered={hoveredPropertyId === property.id}
+                      isSelected={selectedPropertyId === property.id}
+                      onHover={handlePropertyHover}
+                      onLeave={handlePropertyLeave}
+                      onClick={handlePropertyClick}
+                    />
+                  ));
+                })()
               )}
             </div>
             

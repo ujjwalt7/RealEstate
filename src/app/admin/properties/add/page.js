@@ -565,15 +565,15 @@ export default function AddPropertyPage() {
               onClick={() => imageInputRef.current && imageInputRef.current.click()}
               style={{ minHeight: 80 }}
             >
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                ref={imageInputRef}
-                onChange={handleImageUpload}
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              ref={imageInputRef}
+              onChange={handleImageUpload}
                 className="hidden"
-                disabled={isSubmitting || uploading}
-              />
+              disabled={isSubmitting || uploading}
+            />
               <div className="text-gray-500">Drag & drop images here, or click to select (max {MAX_IMAGES})</div>
               {imageErrors.length > 0 && (
                 <ul className="text-red-500 text-xs mt-2">

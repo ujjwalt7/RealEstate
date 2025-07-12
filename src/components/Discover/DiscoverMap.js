@@ -30,8 +30,8 @@ function DiscoverMap({ properties, hoveredPropertyId, selectedPropertyId, onMark
 
       // Create map instance
       const map = L.default.map(mapRef.current, {
-        center: [39.8283, -98.5795], // Center of US
-        zoom: 4,
+        center: [20.5937, 78.9629], // Center of India
+        zoom: 5,
         zoomControl: false, // We'll add custom controls
       });
 
@@ -76,10 +76,36 @@ function DiscoverMap({ properties, hoveredPropertyId, selectedPropertyId, onMark
     properties.forEach(property => {
       const { coordinates } = property;
       
+      // Check if coordinates are valid
+      const hasValidCoordinates = coordinates && 
+        Array.isArray(coordinates) && 
+        coordinates.length === 2 && 
+        typeof coordinates[0] === 'number' && 
+        typeof coordinates[1] === 'number' &&
+        !isNaN(coordinates[0]) && 
+        !isNaN(coordinates[1]);
+      
+      // Use default coordinates for India if no valid coordinates
+      const markerCoordinates = hasValidCoordinates ? coordinates : [20.5937, 78.9629]; // Center of India
+      
       // Create custom icon based on property state
       const getIcon = () => {
         const size = selectedPropertyId === property.id ? 32 : 
                     hoveredPropertyId === property.id ? 28 : 24;
+        
+        // Different icon for properties without coordinates
+        const iconColor = hasValidCoordinates ? 
+          (selectedPropertyId === property.id ? '#0891b2' : 
+           hoveredPropertyId === property.id ? '#06b6d4' : '#6b7280') : 
+          '#f59e0b'; // Orange for properties without coordinates
+        
+        const iconContent = hasValidCoordinates ? 
+          `<svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+          </svg>` :
+          `<svg width="12" height="12" fill="white" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+          </svg>`;
         
         return L.divIcon({
           className: 'custom-marker',
@@ -87,8 +113,7 @@ function DiscoverMap({ properties, hoveredPropertyId, selectedPropertyId, onMark
             <div class="marker-container" style="
               width: ${size}px; 
               height: ${size}px; 
-              background: ${selectedPropertyId === property.id ? '#0891b2' : 
-                          hoveredPropertyId === property.id ? '#06b6d4' : '#6b7280'};
+              background: ${iconColor};
               border: 2px solid white;
               border-radius: 50%;
               display: flex;
@@ -96,10 +121,9 @@ function DiscoverMap({ properties, hoveredPropertyId, selectedPropertyId, onMark
               justify-content: center;
               box-shadow: 0 2px 8px rgba(0,0,0,0.3);
               transition: all 0.3s ease;
+              ${!hasValidCoordinates ? 'opacity: 0.7;' : ''}
             ">
-              <svg width="12" height="12" fill="white" viewBox="0 0 24 24">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
-              </svg>
+              ${iconContent}
             </div>
           `,
           iconSize: [size, size],
@@ -108,7 +132,7 @@ function DiscoverMap({ properties, hoveredPropertyId, selectedPropertyId, onMark
       };
 
       // Create marker
-      const marker = L.marker(coordinates, { icon: getIcon() }).addTo(map);
+      const marker = L.marker(markerCoordinates, { icon: getIcon() }).addTo(map);
 
       // Create popup content
       const popupContent = `
@@ -118,6 +142,7 @@ function DiscoverMap({ properties, hoveredPropertyId, selectedPropertyId, onMark
             <button class="close-popup" style="background: none; border: none; color: #9ca3af; cursor: pointer; font-size: 12px;">✕</button>
           </div>
           <p style="color: #6b7280; font-size: 12px; margin: 0 0 8px 0;">${property.location}</p>
+          ${!hasValidCoordinates ? '<p style="color: #f59e0b; font-size: 11px; margin: 0 0 8px 0; font-style: italic;">📍 Location approximate</p>' : ''}
           <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 8px;">
             <span style="font-weight: 600; color: #0891b2;">${property.price}</span>
             <span style="color: #6b7280;">${property.size}</span>
@@ -226,7 +251,7 @@ function DiscoverMap({ properties, hoveredPropertyId, selectedPropertyId, onMark
       {/* Map Container */}
       <div className="flex-1 relative overflow-hidden z-0" ref={mapRef}>
         {/* Legend */}
-        <div className="absolute bottom-2 lg:bottom-4 left-2 lg:left-4 bg-white rounded-lg shadow-md p-2 lg:p-3 z-[1000] max-w-[120px] lg:max-w-none">
+        <div className="absolute bottom-2 lg:bottom-4 left-2 lg:left-4 bg-white rounded-lg shadow-md p-2 lg:p-3 z-[1000] max-w-[140px] lg:max-w-none">
           <h4 className="text-xs font-semibold text-gray-700 mb-1 lg:mb-2">Property Types</h4>
           <div className="flex flex-col gap-1 text-xs">
             <div className="flex items-center gap-1 lg:gap-2">
@@ -243,6 +268,11 @@ function DiscoverMap({ properties, hoveredPropertyId, selectedPropertyId, onMark
               <div className="w-2 h-2 lg:w-3 lg:h-3 bg-orange-600 rounded-full"></div>
               <span className="text-gray-600 hidden sm:inline">Industrial</span>
               <span className="text-gray-600 sm:hidden">Ind</span>
+            </div>
+            <div className="flex items-center gap-1 lg:gap-2">
+              <div className="w-2 h-2 lg:w-3 lg:h-3 bg-yellow-500 rounded-full opacity-70"></div>
+              <span className="text-gray-600 hidden sm:inline">Approximate</span>
+              <span className="text-gray-600 sm:hidden">Approx</span>
             </div>
           </div>
         </div>
