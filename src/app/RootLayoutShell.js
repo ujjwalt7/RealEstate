@@ -2,7 +2,7 @@
 import LayoutDef from "@/components/Layout";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { logEvent } from "@/lib/analytics";
+import { logEvent } from "@/lib/analytics";import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function RootLayoutShell({ children }) {
   const pathname = usePathname();
@@ -14,5 +14,5 @@ export default function RootLayoutShell({ children }) {
     }
   }, [pathname, isAdmin]);
 
-  return isAdmin ? children : <LayoutDef>{children}</LayoutDef>;
+  return isAdmin ? children : (<><LayoutDef>{children}</LayoutDef><SpeedInsights /></>);
 } 
