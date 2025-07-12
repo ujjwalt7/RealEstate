@@ -9,6 +9,25 @@ import PropertyForm from "@/components/Admin/PropertyForm";
 const PAGE_SIZE = 10;
 const STATUS_OPTIONS = ["active", "inactive", "deleted"];
 
+// Utility to extract file path from Supabase public URL
+function getSupabaseFilePath(url) {
+  // Example: https://<project>.supabase.co/storage/v1/object/public/property-images/filename.jpg
+  const match = url.match(/property-images\/(.+)$/);
+  return match ? match[1] : null;
+}
+
+async function deletePropertyImages(imageUrls, supabase) {
+  const paths = (imageUrls || [])
+    .map(getSupabaseFilePath)
+    .filter(Boolean);
+  if (paths.length > 0) {
+    const { error } = await supabase.storage.from('property-images').remove(paths);
+    if (error) {
+      console.error('Failed to delete images:', error);
+    }
+  }
+}
+
 export default function PropertyTable() {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -79,6 +98,13 @@ export default function PropertyTable() {
   // Delete
   const handleDelete = async (property) => {
     if (!window.confirm("Are you sure you want to delete this property? This cannot be undone.")) return;
+    // Fetch images for this property
+    const { data: propWithImages, error: fetchError } = await supabase.from("properties").select("images").eq("id", property.id).single();
+    if (fetchError) {
+      alert(fetchError.message);
+      return;
+    }
+    await deletePropertyImages(propWithImages.images, supabase);
     const { error } = await supabase.from("properties").delete().eq("id", property.id);
     if (!error) fetchProperties();
     else alert(error.message);
@@ -89,6 +115,14 @@ export default function PropertyTable() {
     if (selected.length === 0) return;
     if (!window.confirm(`Are you sure you want to delete ${selected.length} properties? This cannot be undone.`)) return;
     try {
+      // Fetch all images for selected properties
+      const { data: props, error: fetchError } = await supabase.from("properties").select("images").in("id", selected);
+      if (fetchError) {
+        alert(fetchError.message);
+        return;
+      }
+      const allImageUrls = props.flatMap(p => p.images || []);
+      await deletePropertyImages(allImageUrls, supabase);
       const { data, error } = await supabase.from("properties").delete().in("id", selected);
       if (error) {
         console.error("Bulk delete error:", error);
@@ -109,6 +143,14 @@ export default function PropertyTable() {
   // Delete ALL properties
   const handleDeleteAll = async () => {
     if (!window.confirm("Are you sure you want to delete ALL properties? This cannot be undone.")) return;
+    // Fetch all images for all properties
+    const { data: props, error: fetchError } = await supabase.from("properties").select("images");
+    if (fetchError) {
+      alert(fetchError.message);
+      return;
+    }
+    const allImageUrls = props.flatMap(p => p.images || []);
+    await deletePropertyImages(allImageUrls, supabase);
     const { error } = await supabase.from("properties").delete().neq("id", null);
     if (!error) {
       setSelected([]);

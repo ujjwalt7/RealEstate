@@ -195,6 +195,7 @@ export default function AddPropertyPage() {
         setUploadProgress(Math.round(((i + 1) / files.length) * 100));
         showToast(`Uploaded ${file.name}`, "success");
       } else {
+        console.error(error);
         showToast(`Failed to upload ${file.name}`, "error");
       }
     }
@@ -269,6 +270,7 @@ export default function AddPropertyPage() {
         setUploadProgress(Math.round(((i + 1) / validFiles.length) * 100));
         showToast(`Uploaded ${file.name}`, "success");
       } else {
+        console.error(error);
         showToast(`Failed to upload ${file.name}`, "error");
       }
     }
@@ -305,7 +307,16 @@ export default function AddPropertyPage() {
   return (
     <div className="max-w-4xl mx-auto py-8">
       <h1 className="text-3xl font-bold mb-6">Add Property</h1>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        onKeyDown={e => {
+          if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+            handleSubmit(onSubmit)();
+          }
+        }}
+        className="space-y-8"
+      >
         {/* Basic Info */}
         <div className="bg-white rounded shadow p-6 space-y-4">
           <h2 className="text-xl font-semibold mb-2">Basic Info</h2>
