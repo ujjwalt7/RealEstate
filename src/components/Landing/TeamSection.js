@@ -236,12 +236,6 @@ export default function TeamSection() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="tel:+919876543210"
-                className="px-8 py-4 bg-accentYellow text-borderDark font-bold rounded-xl hover:bg-yellow-400 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform text-center"
-              >
-                Book a Call
-              </a>
-              <a
                 href="/discover"
                 className="px-8 py-4 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform text-center"
               >

@@ -180,38 +180,7 @@ export default function SuccessStories() {
           ))}
         </motion.div>
 
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <div className="bg-gradient-to-r from-accentYellow to-yellow-400 rounded-2xl p-8 lg:p-12 max-w-4xl mx-auto">
-            <h3 className="text-2xl lg:text-3xl font-bold text-borderDark mb-4">
-              Ready to Write Your Success Story?
-            </h3>
-            <p className="text-lg text-borderDark/80 mb-8 max-w-2xl mx-auto">
-              Join hundreds of satisfied clients who have achieved their real estate goals with Varsha Infra. 
-              Let us help you create your own success story.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="tel:+919876543210"
-                className="px-8 py-4 bg-borderDark text-white font-bold rounded-xl hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform text-center"
-              >
-                Book a Call
-              </a>
-              <a
-                href="/discover"
-                className="px-8 py-4 bg-white text-borderDark font-bold rounded-xl hover:bg-gray-50 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform text-center"
-              >
-                View Properties
-              </a>
-            </div>
-          </div>
-        </motion.div>
+        {/* Remove the Book a Call CTA section at the end */}
       </div>
     </section>
   );

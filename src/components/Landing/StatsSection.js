@@ -146,30 +146,6 @@ export default function StatsSection() {
             </motion.div>
           ))}
         </motion.div>
-
-        {/* Bottom CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="text-center mt-12 lg:mt-16"
-        >
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-6 lg:p-8 max-w-2xl mx-auto">
-            <h3 className="text-xl lg:text-2xl font-bold text-borderDark mb-3">
-              Ready to Start Your Journey?
-            </h3>
-            <p className="text-borderDark/80 mb-6">
-              Join thousands of satisfied clients who have found their perfect property with us.
-            </p>
-            <a
-              href="tel:+919876543210"
-              className="px-8 py-4 bg-borderDark text-white font-bold rounded-xl hover:bg-gray-800 transition-colors shadow-lg hover:shadow-xl transform hover:scale-105 transition-transform inline-block"
-            >
-              Book a Call
-            </a>
-          </div>
-        </motion.div>
       </div>
     </section>
   );

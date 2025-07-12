@@ -9,6 +9,7 @@ import StatsSection from "@/components/Landing/StatsSection";
 import TeamSection from "@/components/Landing/TeamSection";
 import SuccessStories from "@/components/Landing/SuccessStories";
 import ProcessSection from "@/components/Landing/ProcessSection";
+import { Link } from "lucide-react";
 
 function Home() {
   return (
@@ -23,6 +24,14 @@ function Home() {
       <MoreSections />
       <TestimonialsSection />
       {/* <AwardSection /> */}
+      <div className="w-full flex justify-center py-12">
+        <a
+          href="tel:+919876543210"
+          className="px-10 py-6 bg-accentBlue texta text-white font-bold rounded-2xl text-2xl shadow-lg hover:bg-blue-800 transition-colors hover:scale-105 transform"
+        >
+          Book a Call
+        </a>
+      </div>
     </div>
   );
 }

@@ -57,7 +57,9 @@ body {
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
-
+.texta {
+  color: white;
+}
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
