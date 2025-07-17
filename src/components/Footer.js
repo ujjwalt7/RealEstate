@@ -73,8 +73,8 @@ function Footer() {
           {submitted && <div className="text-green-400 text-xs mb-2">Thank you for subscribing!</div>}
           <div className="mt-4">
             <h5 className="font-semibold mb-1">Contact Us</h5>
-            <p className="text-gray-300 text-sm">Email: <a href="mailto:varshainfraandproperties@gmail.com" className="hover:text-accentYellow">info@varshainfra.com</a></p>
-            <p className="text-gray-300 text-sm">Phone: <a href="tel:+911169296437" className="hover:text-accentYellow">+91 12345 67890</a></p>
+            <p className="text-gray-300 text-sm">Email: <a href="mailto:varshainfraandproperties@gmail.com" className="hover:text-accentYellow">varshainfraandproperties@gmail.com</a></p>
+            <p className="text-gray-300 text-sm">Phone: <a href="tel:+911169296437" className="hover:text-accentYellow">+911169296437</a></p>
             <p className="text-gray-300 text-sm">Address: Jari Bazar Prayagraj Uttar Pradesh 212106</p>
           </div>
         </div>
