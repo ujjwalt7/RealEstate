@@ -73,8 +73,8 @@ function Footer() {
           {submitted && <div className="text-green-400 text-xs mb-2">Thank you for subscribing!</div>}
           <div className="mt-4">
             <h5 className="font-semibold mb-1">Contact Us</h5>
-            <p className="text-gray-300 text-sm">Email: <a href="mailto:info@varshainfra.com" className="hover:text-accentYellow">info@varshainfra.com</a></p>
-            <p className="text-gray-300 text-sm">Phone: <a href="tel:+911234567890" className="hover:text-accentYellow">+91 12345 67890</a></p>
+            <p className="text-gray-300 text-sm">Email: <a href="mailto:varshainfraandproperties@gmail.com" className="hover:text-accentYellow">info@varshainfra.com</a></p>
+            <p className="text-gray-300 text-sm">Phone: <a href="tel:+911169296437" className="hover:text-accentYellow">+91 12345 67890</a></p>
             <p className="text-gray-300 text-sm">Address: 123, Main Street, Mumbai, India</p>
           </div>
         </div>
