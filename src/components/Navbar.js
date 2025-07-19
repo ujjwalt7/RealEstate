@@ -4,7 +4,11 @@ import NavLinks from "./Main/Small/NavLinks";
 import { BiSolidPhoneCall } from "react-icons/bi";
 import SearchBarNav from "./Main/SeachBarNav";
 import { HiMenuAlt4 } from "react-icons/hi";
+import { useState } from 'react';
+import CallRequestModal from '../components/ui/CallRequestModal';
+import { useCallRequestModal } from './Layout';
 function MaiNavbar() {
+  const { openCallRequestModal } = useCallRequestModal();
   return (
     <div className="w-full top-0 left-0 sticky flex justify-center items-center flex-col gap-1 z-[9999] bg-white/80 backdrop-blur-sm">
       <div className="w-[90%] flex lg:grid grid-cols-3 py-4">
@@ -32,9 +36,10 @@ function MaiNavbar() {
           <SearchBarNav />
         </div>
         <div className="w-full lg:flex items-center justify-end gap-4 hidden ">
-            <div className="px-4 py-2 rounded-full bg-accentBlue border text-white flex border-borderDark text-lg items-center gap-2 hover:border-b-4 cursor-pointer">
+            <div className="px-4 py-2 rounded-full bg-accentBlue border text-white flex border-borderDark text-lg items-center gap-2 hover:border-b-4 cursor-pointer" onClick={openCallRequestModal}>
                 <span className="text-xl"><BiSolidPhoneCall /></span>
-                Get a Call</div>
+                Get a Call
+            </div>
         </div>
       </div>
       <div className="w-[90%] mx-auto flex lg:hidden pb-4">

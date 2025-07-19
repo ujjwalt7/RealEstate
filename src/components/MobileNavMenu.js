@@ -5,6 +5,9 @@ import NavLinks from "./Main/Small/NavLinks";
 import { HiX } from "react-icons/hi";
 import { BiSolidPhoneCall } from "react-icons/bi";
 import { FiMail } from "react-icons/fi";
+import { useState } from 'react';
+import CallRequestModal from './ui/CallRequestModal';
+import { useCallRequestModal } from './Layout';
 
 const navItems = [
   { title: "Home", link: "/" },
@@ -13,6 +16,7 @@ const navItems = [
 ];
 
 export default function MobileNavMenu({ open, onClose }) {
+  const { openCallRequestModal } = useCallRequestModal();
   return (
     <div
       className={`fixed inset-0 z-[10000] transition-all duration-300 ${open ? "translate-x-0" : "translate-x-full"} bg-white flex flex-col h-screen w-screen top-0 left-0`}
@@ -68,7 +72,7 @@ export default function MobileNavMenu({ open, onClose }) {
         <div className="flex flex-col gap-4 w-full items-stretch">
           <button
             className="px-4 py-3 rounded-full bg-accentBlue border text-white flex border-borderDark text-lg items-center gap-2 hover:border-b-4 transition-all duration-150 justify-center"
-            onClick={onClose}
+            onClick={openCallRequestModal}
           >
             <span className="text-xl"><BiSolidPhoneCall /></span>
             Book a Call

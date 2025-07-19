@@ -11,6 +11,7 @@ const navLinks = [
   { href: "/admin/dashboard", label: "Dashboard" },
   { href: "/admin/users", label: "Users" },
   { href: "/admin/properties", label: "Properties" },
+  { href: "/admin/call-requests", label: "Call Requests" },
   { href: "/admin/settings", label: "Settings" },
 ];
 

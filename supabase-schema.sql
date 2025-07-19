@@ -257,3 +257,12 @@ language sql as $$
   union all
   select 'Saved', count(*) from analytics_events where event_type = 'property_save';
 $$; 
+
+-- Call Requests Table
+CREATE TABLE IF NOT EXISTS call_requests (
+  id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
+  name TEXT NOT NULL,
+  phone TEXT NOT NULL,
+  email TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+); 
