@@ -87,7 +87,7 @@ const itemVariants = {
 
 export default function StatsSection() {
   return (
-    <section className="w-full py-16 lg:py-24 bg-gradient-to-r from-[#e0c3fc] to-[#8ec5fc] relative overflow-hidden">
+    <section className="w-full py-16 lg:py-24  relative overflow-hidden">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg%20width%3D%2260%22%20height%3D%2260%22%20viewBox%3D%220%200%2060%2060%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cg%20fill%3D%22none%22%20fill-rule%3D%22evenodd%22%3E%3Cg%20fill%3D%22%23000000%22%20fill-opacity%3D%220.1%22%3E%3Ccircle%20cx%3D%2230%22%20cy%3D%2230%22%20r%3D%222%22/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
@@ -103,7 +103,7 @@ export default function StatsSection() {
           className="text-center mb-12 lg:mb-16"
         >
           <h2 className="text-3xl lg:text-5xl font-bold text-borderDark mb-4">
-            Trusted by <span className="text-white">Thousands</span>
+            Trusted by <span className="text-accentYellow">Thousands</span>
           </h2>
           <p className="text-lg lg:text-xl text-borderDark/80 max-w-3xl mx-auto">
             Our track record speaks for itself. We&apos;ve helped countless clients achieve their real estate dreams 
@@ -128,9 +128,9 @@ export default function StatsSection() {
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 transition={{ duration: 0.3 }}
-                className="w-20 h-20 lg:w-24 lg:h-24 bg-white/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-white/30 transition-colors duration-300"
+                className="w-20 h-20 lg:w-24 lg:h-24 bg-accentYellow/20 backdrop-blur-sm rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-accentYellow/30 transition-colors duration-300"
               >
-                <stat.icon className="w-10 h-10 lg:w-12 lg:h-12 text-white" />
+                <stat.icon className="w-10 h-10 lg:w-12 lg:h-12 text-accentYellow" />
               </motion.div>
               
               <div className="mb-3">

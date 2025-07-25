@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Quote, Star, MapPin, Clock } from "lucide-react";
 import Image from 'next/image';
+import StatsSection from "./StatsSection";
 
 const successStories = [
   {
@@ -181,6 +182,8 @@ export default function SuccessStories() {
         </motion.div>
 
         {/* Remove the Book a Call CTA section at the end */}
+        
+      <StatsSection />
       </div>
     </section>
   );

@@ -20,7 +20,6 @@ function Home() {
     <div className="w-full rounded-t-lg overflow-hidden grid grid-cols-1 gap-8">
       <Starter />
       <ServicesShowcase />
-      <StatsSection />
       <ProcessSection />
       <TrustSection />
       <SuccessStories />

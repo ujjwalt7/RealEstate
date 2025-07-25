@@ -60,6 +60,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import { propertyService } from '@/lib/propertyService';
 import Image from 'next/image';
+import { useCallRequestModal } from '@/components/Layout';
 
 const PropertyDetailPage = () => {
   const params = useParams();
@@ -79,6 +80,7 @@ const PropertyDetailPage = () => {
   });
   const mapRef = useRef(null);
   const carouselMapRef = useRef(null);
+  const { openCallRequestModal } = useCallRequestModal();
 
   useEffect(() => {
     const fetchProperty = async () => {
@@ -632,14 +634,6 @@ const PropertyDetailPage = () => {
     }
   };
 
-  const handleContactAction = (type) => {
-    if (type === 'call') {
-      window.location.href = `tel:${property.contact.phone}`;
-    } else if (type === 'email') {
-      window.location.href = `mailto:${property.contact.email}`;
-    }
-  };
-
   // Create carousel items with map first, then images
   const carouselItems = property ? [
     {
@@ -1114,14 +1108,14 @@ const PropertyDetailPage = () => {
               </div>
               <div className="space-y-3">
                 <button
-                  onClick={() => handleContactAction('call')}
+                  onClick={openCallRequestModal}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-accentYellow text-borderDark font-semibold rounded-xl border-b-4 border-yellow-400 hover:bg-yellow-400 transition-colors"
                 >
                   <IoCallOutline className="w-4 h-4" />
                   Call Agent
                 </button>
                 <button
-                  onClick={() => handleContactAction('email')}
+                  onClick={openCallRequestModal}
                   className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-white border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition-colors"
                 >
                   <IoMailOutline className="w-4 h-4" />
