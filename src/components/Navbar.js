@@ -10,7 +10,7 @@ import { useCallRequestModal } from './Layout';
 function MaiNavbar() {
   const { openCallRequestModal } = useCallRequestModal();
   return (
-    <div className="w-full top-0 left-0 sticky flex justify-center items-center flex-col gap-1 z-[9999] bg-white/80 backdrop-blur-sm">
+    <div className="w-full top-0 left-0 sticky flex justify-center items-center flex-col gap-1 z-[9999] bg-white backdrop-blur-sm">
       <div className="w-[90%] flex lg:grid grid-cols-3 py-4">
         <div className="w-full flex items-center gap-14">
           <div className="w-fit flex items-center gap-1">

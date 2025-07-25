@@ -6,6 +6,7 @@ import MobileNavMenu from "./MobileNavMenu";
 import { HiMenuAlt4 } from "react-icons/hi";
 import Footer from "./Footer";
 import CallRequestModal from './ui/CallRequestModal';
+import { BiSolidPhoneCall } from 'react-icons/bi';
 
 // Create context for command menu
 const CommandMenuContext = createContext();
@@ -59,6 +60,15 @@ function LayoutDef({children}) {
                 <main className="w-full h-full">{children}</main>
                 <CommandMenu isOpen={isCommandMenuOpen} onClose={closeCommandMenu} />
                 <CallRequestModal open={callModalOpen} onClose={closeCallRequestModal} />
+                {/* Floating Call Button */}
+                <button
+                  type="button"
+                  aria-label="Request a Call"
+                  onClick={openCallRequestModal}
+                  className="fixed bottom-6 right-6 z-[10010] bg-accentBlue text-white rounded-full shadow-lg p-4 text-3xl hover:bg-accentBlue/90 transition-colors focus:outline-none focus:ring-2 focus:ring-accentBlue focus:ring-offset-2"
+                >
+                  <BiSolidPhoneCall />
+                </button>
             </div>
             <Footer />
         </CallRequestModalContext.Provider>

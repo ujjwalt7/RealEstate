@@ -17,7 +17,7 @@ import { useCallRequestModal } from '@/components/Layout';
 function Home() {
   const { openCallRequestModal } = useCallRequestModal();
   return (
-    <div className="w-full rounded-t-[5rem] overflow-hidden grid grid-cols-1 gap-8">
+    <div className="w-full rounded-t-lg overflow-hidden grid grid-cols-1 gap-8">
       <Starter />
       <ServicesShowcase />
       <StatsSection />
