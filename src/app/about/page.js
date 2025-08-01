@@ -17,7 +17,7 @@ export default function About() {
       {/* Hero Section */}
       <div className="max-w-5xl mx-auto px-4 pt-10 pb-8 flex flex-col md:flex-row items-center gap-8">
         <div className="flex-1 space-y-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-borderDark mb-2">About Varsha Infra</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-borderDark mb-2">About Varsha Infrastructure</h1>
           <p className="text-lg text-gray-700">
             <b>Varsha Infra</b> is a leading real estate agency with over a decade of experience in helping families, investors, and businesses find their perfect property. Our mission is to deliver trust, transparency, and exceptional value in every transaction. With a team of seasoned professionals, a vast portfolio of properties, and a client-first approach, we have become a trusted name in the industry.
           </p>
