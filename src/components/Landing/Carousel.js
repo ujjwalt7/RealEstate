@@ -5,7 +5,7 @@ import 'swiper/css/effect-fade';
 import Image from 'next/image';
 
 const images = [
-  '/assets/img/Carousel/1.jpeg',
+  // '/assets/img/Carousel/1.jpeg',
   '/assets/img/Carousel/2.jpeg',
   '/assets/img/Carousel/3.jpeg',
   '/assets/img/Carousel/4.jpg',
