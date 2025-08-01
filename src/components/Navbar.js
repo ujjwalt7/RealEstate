@@ -23,7 +23,7 @@ function MaiNavbar() {
             />
             <div className="w-fit flex-col leading-4.5 flex text-2xl font-medium ">
               <div className="">Varsha</div>
-              <div className="">Infra</div>
+              <div className="">Infrastructure</div>
             </div>
           </div>
           <div className="lg:flex hidden items-center justify-start gap-5">
